@@ -1,5 +1,6 @@
 package com.techreturners.bowling_kata;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -15,24 +16,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BowlingGameTest {
 
+    BowlingGame game;
+
+    @BeforeEach
+    public void setUp(){
+        game = new BowlingGame();
+    }
 
     @Test
     public void testAllRollsOnes() {
-        BowlingGame game = new BowlingGame();
         assertEquals(20, game.play("11 11 11 11 11 11 11 11 11 11"));
     }
 
     @ParameterizedTest
     @MethodSource("generateRollSequenceAndExpectedScoreWithDigits1To8NoMissesSparesOrStrikes")
     public void testRollSequencesWithDigits1To8WithNoMissesSparesOrStrikes(int expectedScore, String rollSequence) {
-        BowlingGame game = new BowlingGame();
         assertEquals(expectedScore, game.play(rollSequence));
     }
 
     @ParameterizedTest
     @MethodSource("g")
     public void testRollSequenceWithRolls1To8AndMisses(int expectedScore, String rollSequence){
-        BowlingGame game = new BowlingGame();
         assertEquals(expectedScore, game.play(rollSequence));
     }
 
