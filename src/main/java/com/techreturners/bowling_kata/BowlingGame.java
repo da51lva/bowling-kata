@@ -4,8 +4,11 @@ import java.util.Arrays;
 
 public class BowlingGame {
 
-    public int play(String rollSequence){
-        return Arrays.stream(rollSequence.split(" ")).mapToInt(Integer::parseInt).reduce(0,(acc, roll) -> acc + totalOfRoll(roll));
+    public int play(String rollSequence) {
+        return Arrays.stream(rollSequence.split(" "))
+                .map(e -> e.replace("-", "0")) //replace misses with 0 for conversion to int
+                .mapToInt(Integer::parseInt)
+                .reduce(0, (acc, roll) -> acc + totalOfRoll(roll)); //add all rolls together
     }
 
     private int totalOfRoll(int roll) {
