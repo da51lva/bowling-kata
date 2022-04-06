@@ -3,9 +3,10 @@ package com.techreturners.bowling_kata;
 import com.techreturners.bowling_kata.model.Frame;
 import com.techreturners.bowling_kata.model.Roll;
 
-import java.util.Arrays;
-
 public class BowlingGame {
+
+    private static final int STRIKE_FRAME_LENGTH = 1;
+    private static final int REGULAR_FRAME_LENGTH = 2;
 
     public int play(String rollSequence) {
 
@@ -30,9 +31,19 @@ public class BowlingGame {
      * Map String representation of a frame e.g. "14" or "9/" to a Frame object
      */
     private Frame mapStringToFrame(String frameAsString){
-        Roll firstRoll = mapStringToRoll(frameAsString.substring(0,1));
-        Roll secondRoll = mapStringToRoll(frameAsString.substring(1));
-        return new Frame(firstRoll, secondRoll);
+        Frame frame;
+        if(frameAsString.length() == STRIKE_FRAME_LENGTH){ //Strike
+            Roll firstRoll = mapStringToRoll(frameAsString.substring(0,1));
+            frame = new Frame(firstRoll);
+        } else if(frameAsString.length() == REGULAR_FRAME_LENGTH){ //Normal frame
+            Roll firstRoll = mapStringToRoll(frameAsString.substring(0,1));
+            Roll secondRoll = mapStringToRoll(frameAsString.substring(1));
+            frame = new Frame(firstRoll, secondRoll);
+        } else {
+            throw new IllegalArgumentException("Attempting to map invalid string to a frame: "+frameAsString);
+        }
+
+        return frame;
     }
 
     /**
@@ -73,6 +84,9 @@ public class BowlingGame {
                 break;
             case ("/"):
                 roll = Roll.SPARE;
+                break;
+            case ("X"):
+                roll = Roll.STRIKE;
                 break;
             default:
                 throw new IllegalArgumentException("Attempting to map invalid character: "+rollAsString);

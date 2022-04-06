@@ -47,6 +47,11 @@ public class BowlingGameTest {
         assertEquals(expectedScore, game.play(rollSequence));
     }
 
+    @ParameterizedTest
+    @CsvFileSource(resources = "/roll-sequence-numbers-misses-spares-strikes-no-extra-frames.csv", numLinesToSkip = 1)
+    public void testRollSequenceWithNumbersMissesAndSparesStrikes(int expectedScore, String rollSequence){
+        assertEquals(expectedScore, game.play(rollSequence));
+    }
 
     private static Stream<Arguments> generateRollSequenceAndExpectedScoreWithDigits1To8AndMisses(){
         List<Arguments> arguments = new ArrayList<Arguments>();
