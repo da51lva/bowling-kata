@@ -30,5 +30,5 @@ public class StandardFrame implements Frame{
     public Stream<Roll> getRollsAsStream() {
         return Stream.of(roll1,roll2);
     }
-    
+
 }

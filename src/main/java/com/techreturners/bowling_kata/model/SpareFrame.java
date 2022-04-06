@@ -24,7 +24,7 @@ public class SpareFrame implements Frame {
     }
 
     @Override
-    public Stream<Roll> getRollsAsStream() {
+    public Stream<Roll> getRollsAsStream() { // todo: best way?
         return Stream.of(roll1, roll2);
     }
 }

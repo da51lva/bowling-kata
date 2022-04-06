@@ -7,7 +7,7 @@ public class StrikeFrame implements Frame {
 
 
     @Override
-    public boolean canCalculateFrameScore(Queue<Frame> frames) {
+    public boolean canCalculateFrameScore(Queue<Frame> frames) { // todo: best way?
         return frames.stream()
                 .flatMap(frame -> frame.getRollsAsStream()) //convert to Stream of rolls
                 .limit(3) //Strike frame needs two next rolls to score
