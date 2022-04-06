@@ -75,7 +75,7 @@ public class BowlingGame {
                 roll = Roll.SPARE;
                 break;
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Attempting to map invalid character: "+rollAsString);
         }
         return roll;
     }
