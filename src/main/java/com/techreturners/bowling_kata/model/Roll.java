@@ -11,16 +11,17 @@ public enum Roll {
     EIGHT(8),
     NINE(9),
     MISS(0),
-    SPARE(10),
+   // SPARE(10),
     STRIKE(10);
 
     private final int value;
 
-    private Roll(int value) {
+    Roll(int value) {
         this.value = value;
     }
 
     public int getValue(){
         return value;
     }
+
 }

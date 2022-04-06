@@ -1,6 +1,7 @@
 package com.techreturners.bowling_kata;
 
 import com.techreturners.bowling_kata.app.BowlingGame;
+import com.techreturners.bowling_kata.model.Roll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

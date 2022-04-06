@@ -1,7 +1,9 @@
 package com.techreturners.bowling_kata.app;
 
-import com.techreturners.bowling_kata.model.Frame;
-import com.techreturners.bowling_kata.model.Roll;
+import com.techreturners.bowling_kata.model.*;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class BowlingGame {
 
@@ -10,21 +12,16 @@ public class BowlingGame {
 
     public int play(String rollSequence) {
 
+        BowlingBoard board = new BowlingBoard();
         String[] framesAsStrings = rollSequence.split(" ");
 
-        int total = 0;
-
-        Frame nextFrame = mapStringToFrame(framesAsStrings[0]);
-        for(int i = 0; i < framesAsStrings.length-1; i++){ //iterate up to penultimate frame
-            Frame currentFrame = nextFrame;
-            nextFrame = mapStringToFrame(framesAsStrings[i+1]);
-            currentFrame.addNextFrame(nextFrame);
-            total += currentFrame.getFrameTotal();
+        for(String frameAsString : framesAsStrings){
+            Frame frame = mapStringToFrame(frameAsString);
+            board.addFrame(frame);
         }
-        total += nextFrame.getFrameTotal(); //add the final frame to accumulator
 
 
-        return (total);
+        return board.getScoreAccumulator();
     }
 
     /**
@@ -32,15 +29,17 @@ public class BowlingGame {
      */
     private Frame mapStringToFrame(String frameAsString){
         Frame frame;
-        if(frameAsString.length() == STRIKE_FRAME_LENGTH){ //Strike
+        if(frameAsString.equals("X")){
+            frame = new StrikeFrame();
+        } else if(frameAsString.substring(1).equals("/")){ //Spare frame
             Roll firstRoll = mapStringToRoll(frameAsString.substring(0,1));
-            frame = new Frame(firstRoll);
-        } else if(frameAsString.length() == REGULAR_FRAME_LENGTH){ //Normal frame
+            String secondRollAsString = String.valueOf(10-firstRoll.getValue());
+            Roll secondRoll = mapStringToRoll(secondRollAsString);
+            frame = new SpareFrame(firstRoll,secondRoll);
+        } else {
             Roll firstRoll = mapStringToRoll(frameAsString.substring(0,1));
             Roll secondRoll = mapStringToRoll(frameAsString.substring(1));
-            frame = new Frame(firstRoll, secondRoll);
-        } else {
-            throw new IllegalArgumentException("Attempting to map invalid string to a frame: "+frameAsString);
+            frame = new StandardFrame(firstRoll, secondRoll);
         }
 
         return frame;
@@ -81,12 +80,6 @@ public class BowlingGame {
                 break;
             case ("-"):
                 roll = Roll.MISS;
-                break;
-            case ("/"):
-                roll = Roll.SPARE;
-                break;
-            case ("X"):
-                roll = Roll.STRIKE;
                 break;
             default:
                 throw new IllegalArgumentException("Attempting to map invalid character: "+rollAsString);
