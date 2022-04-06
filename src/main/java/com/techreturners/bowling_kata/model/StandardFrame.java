@@ -30,23 +30,5 @@ public class StandardFrame implements Frame{
     public Stream<Roll> getRollsAsStream() {
         return Stream.of(roll1,roll2);
     }
-
-
-    /*public int getFrameTotal() {
-        int frameTotal = getFrameBasicTotal();
-        if(this.isAStrike())
-            frameTotal+=nextFrame.getFrameBasicTotal();
-        else if(this.isASpare())
-            frameTotal+=nextFrame.getFirstRoll().getValue();
-        return frameTotal;
-    }
-
-    private int getFrameBasicTotal() {
-        if (this.isAStrike())
-            return roll1.getValue();
-        if (this.isASpare())
-            return roll2.getValue();
-        else
-            return roll1.getValue() + roll2.getValue();
-    }*/
+    
 }
