@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
@@ -39,6 +40,13 @@ public class BowlingGameTest {
     public void testRollSequenceWithRolls1To8AndMisses(int expectedScore, String rollSequence){
         assertEquals(expectedScore, game.play(rollSequence));
     }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/roll-sequence-numbers-misses-spares-no-extra-frames.csv", numLinesToSkip = 1)
+    public void testRollSequenceWithNumbersMissesAndSpares(int expectedScore, String rollSequence){
+        assertEquals(expectedScore, game.play(rollSequence));
+    }
+
 
     private static Stream<Arguments> generateRollSequenceAndExpectedScoreWithDigits1To8AndMisses(){
         List<Arguments> arguments = new ArrayList<Arguments>();
@@ -113,6 +121,24 @@ public class BowlingGameTest {
         int firstDigit = (i / 10) % 10;
         int secondDigit = i % 10;
         return firstDigit + secondDigit < 10;
+    }
+
+    /**
+     * checks the combined total a 2-digit number is <= 10
+     */
+    private static boolean digitTotalLessThanOrEqualTo10(int i) {
+        int firstDigit = (i / 10) % 10;
+        int secondDigit = i % 10;
+        return firstDigit + secondDigit <= 10;
+    }
+
+    /**
+     * checks the combined total a 2-digit number is = 10
+     */
+    private static boolean digitTotalEqualTo10(int i) {
+        int firstDigit = (i / 10) % 10;
+        int secondDigit = i % 10;
+        return firstDigit + secondDigit == 10;
     }
 
 }
