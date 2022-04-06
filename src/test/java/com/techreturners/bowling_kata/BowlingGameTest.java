@@ -35,18 +35,18 @@ public class BowlingGameTest {
     }
 
     @ParameterizedTest
-    @MethodSource("g")
+    @MethodSource("generateRollSequenceAndExpectedScoreWithDigits1To8AndMisses")
     public void testRollSequenceWithRolls1To8AndMisses(int expectedScore, String rollSequence){
         assertEquals(expectedScore, game.play(rollSequence));
     }
 
-    private static Stream<Arguments> g(){
+    private static Stream<Arguments> generateRollSequenceAndExpectedScoreWithDigits1To8AndMisses(){
         List<Arguments> arguments = new ArrayList<Arguments>();
 
         for (int i = 0; i < 10; i++) {
 
             List<Integer> rollSequenceList = new Random().ints(11, 81) //infinite stream of ints
-                    .filter(e -> digitTotalLessThan10(e)) //total of digits < 10 as this is spare or strike
+                    .filter(BowlingGameTest::digitTotalLessThan10) //total of digits < 10 as this is spare or strike
                     .boxed()
                     .limit(10) //10 frames in bowling match with no spare or strikes
                     .collect(Collectors.toList());
@@ -77,7 +77,7 @@ public class BowlingGameTest {
 
             List<Integer> rollSequenceList = new Random().ints(11, 81) //infinite stream of ints
                     .filter(e -> e % 10 != 0) // Ones digit is 0 as this is a miss
-                    .filter(e -> digitTotalLessThan10(e)) //total of digits < 10 as this is spare or strike
+                    .filter(BowlingGameTest::digitTotalLessThan10) //total of digits < 10 as this is spare or strike
                     .boxed()
                     .limit(10) //10 frames in bowling match with no spare or strikes
                     .collect(Collectors.toList());
