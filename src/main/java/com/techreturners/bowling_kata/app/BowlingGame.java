@@ -1,4 +1,4 @@
-package com.techreturners.bowling_kata;
+package com.techreturners.bowling_kata.app;
 
 import com.techreturners.bowling_kata.model.Frame;
 import com.techreturners.bowling_kata.model.Roll;
