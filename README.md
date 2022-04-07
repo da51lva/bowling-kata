@@ -37,12 +37,22 @@ X X X X X X X X X XXX (12 rolls: 12 strikes) = 10 frames * 30 points = 300
 9- 9- 9- 9- 9- 9- 9- 9- 9- 9- (20 rolls: 10 pairs of 9 and miss) = 10 frames * 9 points = 90
 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/5 (21 rolls: 10 pairs of 5 and spare, with a final 5) = 10 frames * 15 points = 150
 
+---
 ## My solution
 
 Takes an input String with the full roll sequence for a game and returns the score as an int
 
+## Unit Tests 
+
+Unit tests from the TDD
+
+![Bowling Tests](resources/bowling-tests.png)
+
+run `mvn test` to run these tests
+
 ### Future extensions
 
 - Turn into a console application where a user can input a roll one by one
-- Restrict incorrect inputs
 - Provide intermediary frames scrores  
+- Restrict incorrect inputs
+
