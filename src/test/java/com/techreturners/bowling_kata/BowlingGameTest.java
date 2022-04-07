@@ -1,7 +1,6 @@
 package com.techreturners.bowling_kata;
 
 import com.techreturners.bowling_kata.app.BowlingGame;
-import com.techreturners.bowling_kata.model.Roll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,7 +21,7 @@ public class BowlingGameTest {
     BowlingGame game;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         game = new BowlingGame();
     }
 
@@ -39,30 +38,30 @@ public class BowlingGameTest {
 
     @ParameterizedTest
     @MethodSource("generateRollSequenceAndExpectedScoreWithDigits1To8AndMisses")
-    public void testRollSequenceWithRolls1To8AndMisses(int expectedScore, String rollSequence){
+    public void testRollSequenceWithRolls1To8AndMisses(int expectedScore, String rollSequence) {
         assertEquals(expectedScore, game.play(rollSequence));
     }
 
     @ParameterizedTest
     @CsvFileSource(resources = "/roll-sequence-numbers-misses-spares-no-extra-frames.csv", numLinesToSkip = 1)
-    public void testRollSequenceWithNumbersMissesAndSpares(int expectedScore, String rollSequence){
+    public void testRollSequenceWithNumbersMissesAndSpares(int expectedScore, String rollSequence) {
         assertEquals(expectedScore, game.play(rollSequence));
     }
 
     @ParameterizedTest
     @CsvFileSource(resources = "/roll-sequence-numbers-misses-spares-strikes-no-extra-frames.csv", numLinesToSkip = 1)
-    public void testRollSequenceWithNumbersMissesAndSparesStrikes(int expectedScore, String rollSequence){
+    public void testRollSequenceWithNumbersMissesAndSparesStrikes(int expectedScore, String rollSequence) {
         assertEquals(expectedScore, game.play(rollSequence));
     }
 
     @ParameterizedTest
     @CsvFileSource(resources = "/roll-sequence-with-bonus-rolls.csv", numLinesToSkip = 1)
-    public void testRollSequenceWithBonusRolls(int expectedScore, String rollSequence){
+    public void testRollSequenceWithBonusRolls(int expectedScore, String rollSequence) {
         assertEquals(expectedScore, game.play(rollSequence));
     }
 
-    private static Stream<Arguments> generateRollSequenceAndExpectedScoreWithDigits1To8AndMisses(){
-        List<Arguments> arguments = new ArrayList<Arguments>();
+    private static Stream<Arguments> generateRollSequenceAndExpectedScoreWithDigits1To8AndMisses() {
+        List<Arguments> arguments = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
 
@@ -74,7 +73,7 @@ public class BowlingGameTest {
 
             String rollSequence = rollSequenceList.stream()
                     .map(String::valueOf)
-                    .map(e -> e.replace("0","-"))
+                    .map(e -> e.replace("0", "-"))
                     .collect(Collectors.joining(" ")); //convert List to String
 
             int totalScore = rollSequenceList.stream()
@@ -92,12 +91,12 @@ public class BowlingGameTest {
      * calculates the expected score
      */
     private static Stream<Arguments> generateRollSequenceAndExpectedScoreWithDigits1To8NoMissesSparesOrStrikes() {
-        List<Arguments> arguments = new ArrayList<Arguments>();
+        List<Arguments> arguments = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
 
             List<Integer> rollSequenceList = new Random().ints(11, 81) //infinite stream of ints
-                    .filter(e -> e % 10 != 0) // Ones digit is 0 as this is a miss
+                    .filter(e -> e % 10 != 0) // One's digit is 0 as this is a miss
                     .filter(BowlingGameTest::digitTotalLessThan10) //total of digits < 10 as this is spare or strike
                     .boxed()
                     .limit(10) //10 frames in bowling match with no spare or strikes
@@ -136,22 +135,5 @@ public class BowlingGameTest {
         return firstDigit + secondDigit < 10;
     }
 
-    /**
-     * checks the combined total a 2-digit number is <= 10
-     */
-    private static boolean digitTotalLessThanOrEqualTo10(int i) {
-        int firstDigit = (i / 10) % 10;
-        int secondDigit = i % 10;
-        return firstDigit + secondDigit <= 10;
-    }
-
-    /**
-     * checks the combined total a 2-digit number is = 10
-     */
-    private static boolean digitTotalEqualTo10(int i) {
-        int firstDigit = (i / 10) % 10;
-        int secondDigit = i % 10;
-        return firstDigit + secondDigit == 10;
-    }
 
 }

@@ -5,7 +5,7 @@ import java.util.Queue;
 
 public class BowlingBoard {
 
-    private Queue<Frame> frames = new LinkedList<Frame>();
+    private final Queue<Frame> frames = new LinkedList<>();
     private int scoreAccumulator = 0;
 
     public void addFrame(Frame frame){

@@ -5,8 +5,8 @@ import java.util.stream.Stream;
 
 public class StandardFrame implements Frame{
 
-    private Roll roll1;
-    private Roll roll2;
+    private final Roll roll1;
+    private final Roll roll2;
 
     public StandardFrame(Roll roll1, Roll roll2) {
         this.roll1 = roll1;

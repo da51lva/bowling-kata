@@ -8,20 +8,16 @@ import java.util.regex.Pattern;
 
 public class BowlingGame {
 
-    private static final int STRIKE_FRAME_LENGTH = 1;
-    private static final int REGULAR_FRAME_LENGTH = 2;
-    private Pattern pattern = Pattern.compile("^(X?([1-9]))\\/([1-9X])?$");
+    private static final Pattern spare_pattern = Pattern.compile("^(X?([1-9]))/([1-9X])?$");
 
     public int play(String rollSequence) {
 
         BowlingBoard board = new BowlingBoard();
         String[] framesAsStrings = rollSequence.split(" ");
 
-        int i = 0;
         for (String frameAsString : framesAsStrings) {
             Frame frame = mapStringToFrame(frameAsString);
             board.addFrame(frame);
-            i++;
         }
 
 
@@ -57,7 +53,7 @@ public class BowlingGame {
     }
 
     private String replaceSpareToken(String frame){
-        Matcher matcher = pattern.matcher(frame);
+        Matcher matcher = spare_pattern.matcher(frame);
         if(matcher.find()) {
             int precedingNumber = Integer.parseInt(matcher.group(2));
             return matcher.replaceFirst(matcher.group(1) + (10 - precedingNumber) + Optional.ofNullable(matcher.group(3)).orElse(""));
