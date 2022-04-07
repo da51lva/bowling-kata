@@ -9,15 +9,16 @@ import java.util.regex.Pattern;
 
 public class BowlingGame {
 
+    private static final Pattern spare_frame_pattern = Pattern.compile("^([1-9])/$");
     private static final Pattern spare_pattern = Pattern.compile("^(X?([1-9]))/([1-9X])?$");
 
     public int play(String rollSequence) {
 
         BowlingBoard board = new BowlingBoard();
 
-        Arrays.stream(rollSequence.split(" "))
-                .map(this::mapStringToFrame)
-                .forEach(board::addFrame);
+        Arrays.stream(rollSequence.split(" ")) // process each frame individually
+                .map(this::mapStringToFrame) // map string representation of frame to Frame object
+                .forEach(board::addFrame); // add frame to Bowling Board
 
         return board.getScoreAccumulator();
     }
@@ -25,39 +26,57 @@ public class BowlingGame {
     /**
      * Map String representation of a frame e.g. "14" or "9/" to a Frame object
      */
-    private Frame mapStringToFrame(String frameAsString) { //todo: refactor disgusting code
+    private Frame mapStringToFrame(String frameAsString) { 
+
         Frame frame;
+        Roll firstRoll = mapStringToRoll(frameAsString.substring(0, 1)); //every frame type will have a first roll
+        Matcher matcher = spare_frame_pattern.matcher(frameAsString);
+
+
         if (frameAsString.equals("X")) {
+
             frame = new StrikeFrame();
-        } else if (frameAsString.substring(1).equals("/")) { // Spare frame
-            Roll firstRoll = mapStringToRoll(frameAsString.substring(0, 1));
-            String secondRollAsString = String.valueOf(10 - firstRoll.getValue());
-            Roll secondRoll = mapStringToRoll(secondRollAsString);
+
+        } else if (matcher.find()) { // Spare frame
+
+            Roll secondRoll = mapStringToRoll(replaceSpareTokenInSpareFrame(matcher).substring(1));
             frame = new SpareFrame(firstRoll, secondRoll);
+
         } else if (frameAsString.length() == 2) { // Standard frame
-            Roll firstRoll = mapStringToRoll(frameAsString.substring(0, 1));
+
             Roll secondRoll = mapStringToRoll(frameAsString.substring(1));
             frame = new StandardFrame(firstRoll, secondRoll);
+
         } else if (frameAsString.length() == 3) { // 10th Frame with bonus rolls
-            frameAsString = replaceSpareToken(frameAsString);
-            Roll firstRoll = mapStringToRoll(frameAsString.substring(0, 1));
+
+            matcher = spare_pattern.matcher(frameAsString);
+            if (matcher.find()) frameAsString = replaceSpareTokenIn10thFrame(matcher); //replace spare token if present
+
             Roll secondRoll = mapStringToRoll(frameAsString.substring(1, 2));
             Roll thirdRoll = mapStringToRoll(frameAsString.substring(2));
-            return new BonusRollFrame(firstRoll, secondRoll, thirdRoll);
+            frame = new BonusRollFrame(firstRoll, secondRoll, thirdRoll);
+
         } else {
             throw new IllegalArgumentException("Attempting to map invalid string to frame: " + frameAsString);
         }
         return frame;
     }
 
-    private String replaceSpareToken(String frame) {
-        Matcher matcher = spare_pattern.matcher(frame);
-        if (matcher.find()) {
-            int precedingNumber = Integer.parseInt(matcher.group(2));
-            return matcher.replaceFirst(matcher.group(1) + (10 - precedingNumber) + Optional.ofNullable(matcher.group(3)).orElse(
-                    ""));
-        }
-        return frame;
+    /**
+     * Replaces Spare token with roll value in 10th Frame. Takes a matcher object which has performed matcher,find()
+     */
+    private String replaceSpareTokenIn10thFrame(Matcher matcher) {
+        int precedingNumber = Integer.parseInt(matcher.group(2));
+        return matcher.replaceFirst(matcher.group(1) + (10 - precedingNumber) + Optional.ofNullable(matcher.group(3)).orElse(
+                ""));
+    }
+
+    /**
+     * Replaces Spare token with roll value in a normal Frame. Takes a matcher object which has performed matcher,find()
+     */
+    private String replaceSpareTokenInSpareFrame(Matcher matcher) {
+        int precedingNumber = Integer.parseInt(matcher.group(1));
+        return matcher.replaceFirst(matcher.group(1) + (10 - precedingNumber));
     }
 
     /**
