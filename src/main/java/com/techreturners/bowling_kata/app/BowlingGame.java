@@ -2,6 +2,7 @@ package com.techreturners.bowling_kata.app;
 
 import com.techreturners.bowling_kata.model.*;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,13 +14,10 @@ public class BowlingGame {
     public int play(String rollSequence) {
 
         BowlingBoard board = new BowlingBoard();
-        String[] framesAsStrings = rollSequence.split(" ");
 
-        for (String frameAsString : framesAsStrings) {
-            Frame frame = mapStringToFrame(frameAsString);
-            board.addFrame(frame);
-        }
-
+        Arrays.stream(rollSequence.split(" "))
+                .map(this::mapStringToFrame)
+                .forEach(board::addFrame);
 
         return board.getScoreAccumulator();
     }
@@ -45,18 +43,19 @@ public class BowlingGame {
             Roll firstRoll = mapStringToRoll(frameAsString.substring(0, 1));
             Roll secondRoll = mapStringToRoll(frameAsString.substring(1, 2));
             Roll thirdRoll = mapStringToRoll(frameAsString.substring(2));
-            return new BonusRollFrame(firstRoll,secondRoll,thirdRoll);
+            return new BonusRollFrame(firstRoll, secondRoll, thirdRoll);
         } else {
             throw new IllegalArgumentException("Attempting to map invalid string to frame: " + frameAsString);
         }
         return frame;
     }
 
-    private String replaceSpareToken(String frame){
+    private String replaceSpareToken(String frame) {
         Matcher matcher = spare_pattern.matcher(frame);
-        if(matcher.find()) {
+        if (matcher.find()) {
             int precedingNumber = Integer.parseInt(matcher.group(2));
-            return matcher.replaceFirst(matcher.group(1) + (10 - precedingNumber) + Optional.ofNullable(matcher.group(3)).orElse(""));
+            return matcher.replaceFirst(matcher.group(1) + (10 - precedingNumber) + Optional.ofNullable(matcher.group(3)).orElse(
+                    ""));
         }
         return frame;
     }
