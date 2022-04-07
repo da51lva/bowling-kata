@@ -26,7 +26,7 @@ public class BowlingGame {
     /**
      * Map String representation of a frame e.g. "14" or "9/" to a Frame object
      */
-    private Frame mapStringToFrame(String frameAsString) { 
+    private Frame mapStringToFrame(String frameAsString) {
 
         Frame frame;
         Roll firstRoll = mapStringToRoll(frameAsString.substring(0, 1)); //every frame type will have a first roll
