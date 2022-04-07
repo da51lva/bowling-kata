@@ -2,22 +2,26 @@ package com.techreturners.bowling_kata.app;
 
 import com.techreturners.bowling_kata.model.*;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BowlingGame {
 
     private static final int STRIKE_FRAME_LENGTH = 1;
     private static final int REGULAR_FRAME_LENGTH = 2;
+    private Pattern pattern = Pattern.compile("^(X?([1-9]))\\/([1-9X])?$");
 
     public int play(String rollSequence) {
 
         BowlingBoard board = new BowlingBoard();
         String[] framesAsStrings = rollSequence.split(" ");
 
-        for(String frameAsString : framesAsStrings){
+        int i = 0;
+        for (String frameAsString : framesAsStrings) {
             Frame frame = mapStringToFrame(frameAsString);
             board.addFrame(frame);
+            i++;
         }
 
 
@@ -27,30 +31,46 @@ public class BowlingGame {
     /**
      * Map String representation of a frame e.g. "14" or "9/" to a Frame object
      */
-    private Frame mapStringToFrame(String frameAsString){
+    private Frame mapStringToFrame(String frameAsString) { //todo: refactor disgusting code
         Frame frame;
-        if(frameAsString.equals("X")){
+        if (frameAsString.equals("X")) {
             frame = new StrikeFrame();
-        } else if(frameAsString.substring(1).equals("/")){ //Spare frame
-            Roll firstRoll = mapStringToRoll(frameAsString.substring(0,1));
-            String secondRollAsString = String.valueOf(10-firstRoll.getValue());
+        } else if (frameAsString.substring(1).equals("/")) { // Spare frame
+            Roll firstRoll = mapStringToRoll(frameAsString.substring(0, 1));
+            String secondRollAsString = String.valueOf(10 - firstRoll.getValue());
             Roll secondRoll = mapStringToRoll(secondRollAsString);
-            frame = new SpareFrame(firstRoll,secondRoll);
-        } else {
-            Roll firstRoll = mapStringToRoll(frameAsString.substring(0,1));
+            frame = new SpareFrame(firstRoll, secondRoll);
+        } else if (frameAsString.length() == 2) { // Standard frame
+            Roll firstRoll = mapStringToRoll(frameAsString.substring(0, 1));
             Roll secondRoll = mapStringToRoll(frameAsString.substring(1));
             frame = new StandardFrame(firstRoll, secondRoll);
+        } else if (frameAsString.length() == 3) { // 10th Frame with bonus rolls
+            frameAsString = replaceSpareToken(frameAsString);
+            Roll firstRoll = mapStringToRoll(frameAsString.substring(0, 1));
+            Roll secondRoll = mapStringToRoll(frameAsString.substring(1, 2));
+            Roll thirdRoll = mapStringToRoll(frameAsString.substring(2));
+            return new BonusRollFrame(firstRoll,secondRoll,thirdRoll);
+        } else {
+            throw new IllegalArgumentException("Attempting to map invalid string to frame: " + frameAsString);
         }
+        return frame;
+    }
 
+    private String replaceSpareToken(String frame){
+        Matcher matcher = pattern.matcher(frame);
+        if(matcher.find()) {
+            int precedingNumber = Integer.parseInt(matcher.group(2));
+            return matcher.replaceFirst(matcher.group(1) + (10 - precedingNumber) + Optional.ofNullable(matcher.group(3)).orElse(""));
+        }
         return frame;
     }
 
     /**
-     *  Map String representation of a roll e.g. "1" or "/" or "-" to a Roll enum
+     * Map String representation of a roll e.g. "1" or "/" or "-" to a Roll enum
      */
-    private Roll mapStringToRoll(String rollAsString){
+    private Roll mapStringToRoll(String rollAsString) {
         Roll roll;
-        switch(rollAsString) {
+        switch (rollAsString) {
             case ("1"):
                 roll = Roll.ONE;
                 break;
@@ -81,8 +101,11 @@ public class BowlingGame {
             case ("-"):
                 roll = Roll.MISS;
                 break;
+            case ("X"):
+                roll = Roll.STRIKE;
+                break;
             default:
-                throw new IllegalArgumentException("Attempting to map invalid character: "+rollAsString);
+                throw new IllegalArgumentException("Attempting to map invalid character: " + rollAsString);
         }
         return roll;
     }

@@ -1,16 +1,18 @@
 package com.techreturners.bowling_kata.model;
 
-import java.util.*;
+import java.util.Queue;
 import java.util.stream.Stream;
 
-public class StandardFrame implements Frame{
+public class BonusRollFrame implements Frame{
 
     private Roll roll1;
     private Roll roll2;
+    private Roll roll3;
 
-    public StandardFrame(Roll roll1, Roll roll2) {
+    public BonusRollFrame(Roll roll1, Roll roll2, Roll roll3) {
         this.roll1 = roll1;
         this.roll2 = roll2;
+        this.roll3 = roll3;
     }
 
     @Override
@@ -20,12 +22,12 @@ public class StandardFrame implements Frame{
 
     @Override
     public int calculateScore(Queue<Frame> frames) {
-        return roll1.getValue() + roll2.getValue();
+        return roll1.getValue() + roll2.getValue() + roll3.getValue();
     }
 
     @Override
     public Stream<Roll> getRollsAsStream() {
-        return Stream.of(roll1,roll2);
+        return Stream.of(roll1,roll2, roll3);
     }
 
 }
