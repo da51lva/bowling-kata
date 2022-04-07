@@ -1,4 +1,4 @@
-package com.techreturners.bowling_kata.model;
+package com.techreturners.bowlingkata.model;
 
 import java.util.*;
 import java.util.stream.Stream;

@@ -1,6 +1,6 @@
-package com.techreturners.bowling_kata.app;
+package com.techreturners.bowlingkata.app;
 
-import com.techreturners.bowling_kata.model.*;
+import com.techreturners.bowlingkata.model.*;
 
 import java.util.Arrays;
 import java.util.Optional;
