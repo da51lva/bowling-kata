@@ -31,25 +31,25 @@ public class BowlingGameTest {
     }
 
     @ParameterizedTest
-    @MethodSource("generateRollSequenceAndExpectedScoreWithDigits1To8NoMissesSparesOrStrikes")
-    public void testRollSequencesWithDigits1To8WithNoMissesSparesOrStrikes(int expectedScore, String rollSequence) {
+    @MethodSource("generateRollSequenceWithNumbers")
+    public void testRollSequencesWithNumbers(int expectedScore, String rollSequence) {
         assertEquals(expectedScore, game.play(rollSequence));
     }
 
     @ParameterizedTest
-    @MethodSource("generateRollSequenceAndExpectedScoreWithDigits1To8AndMisses")
-    public void testRollSequenceWithRolls1To8AndMisses(int expectedScore, String rollSequence) {
+    @MethodSource("generateRollSequenceNumbersAndMisses")
+    public void testRollSequenceWithNumbersAndMisses(int expectedScore, String rollSequence) {
         assertEquals(expectedScore, game.play(rollSequence));
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/roll-sequence-numbers-misses-spares-no-extra-frames.csv", numLinesToSkip = 1)
+    @CsvFileSource(resources = "/roll-sequence-numbers-misses-spares.csv", numLinesToSkip = 1)
     public void testRollSequenceWithNumbersMissesAndSpares(int expectedScore, String rollSequence) {
         assertEquals(expectedScore, game.play(rollSequence));
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/roll-sequence-numbers-misses-spares-strikes-no-extra-frames.csv", numLinesToSkip = 1)
+    @CsvFileSource(resources = "/roll-sequence-numbers-misses-spares-strikes.csv", numLinesToSkip = 1)
     public void testRollSequenceWithNumbersMissesAndSparesStrikes(int expectedScore, String rollSequence) {
         assertEquals(expectedScore, game.play(rollSequence));
     }
@@ -60,7 +60,7 @@ public class BowlingGameTest {
         assertEquals(expectedScore, game.play(rollSequence));
     }
 
-    private static Stream<Arguments> generateRollSequenceAndExpectedScoreWithDigits1To8AndMisses() {
+    private static Stream<Arguments> generateRollSequenceNumbersAndMisses() {
         List<Arguments> arguments = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
@@ -90,7 +90,7 @@ public class BowlingGameTest {
      * generates random roll sequences of 10 frames with digits 1 to 8, excluding misses spares or strikes and
      * calculates the expected score
      */
-    private static Stream<Arguments> generateRollSequenceAndExpectedScoreWithDigits1To8NoMissesSparesOrStrikes() {
+    private static Stream<Arguments> generateRollSequenceWithNumbers() {
         List<Arguments> arguments = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {

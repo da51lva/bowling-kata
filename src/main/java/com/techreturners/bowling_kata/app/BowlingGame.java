@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
 
 public class BowlingGame {
 
-    private static final Pattern spare_frame_pattern = Pattern.compile("^([1-9])/$");
-    private static final Pattern spare_pattern = Pattern.compile("^(X?([1-9]))/([1-9X])?$");
+    private static final Pattern SPARE_FRAME_PATTERN = Pattern.compile("^([1-9])/$");
+    private static final Pattern TENTH_FRAME_SPARE_PATTERN = Pattern.compile("^(X?([1-9]))/([1-9X])?$");
 
     public int play(String rollSequence) {
 
@@ -30,7 +30,7 @@ public class BowlingGame {
 
         Frame frame;
         Roll firstRoll = mapStringToRoll(frameAsString.substring(0, 1)); //every frame type will have a first roll
-        Matcher matcher = spare_frame_pattern.matcher(frameAsString);
+        Matcher matcher = SPARE_FRAME_PATTERN.matcher(frameAsString);
 
 
         if (frameAsString.equals("X")) {
@@ -49,7 +49,7 @@ public class BowlingGame {
 
         } else if (frameAsString.length() == 3) { // 10th Frame with bonus rolls
 
-            matcher = spare_pattern.matcher(frameAsString);
+            matcher = TENTH_FRAME_SPARE_PATTERN.matcher(frameAsString);
             if (matcher.find()) frameAsString = replaceSpareTokenIn10thFrame(matcher); //replace spare token if present
 
             Roll secondRoll = mapStringToRoll(frameAsString.substring(1, 2));
