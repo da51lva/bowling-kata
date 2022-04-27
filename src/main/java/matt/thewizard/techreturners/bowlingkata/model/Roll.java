@@ -1,4 +1,4 @@
-package com.techreturners.bowlingkata.model;
+package matt.thewizard.techreturners.bowlingkata.model;
 
 public enum Roll {
     ONE(1),

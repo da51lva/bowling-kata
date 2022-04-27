@@ -1,6 +1,7 @@
-package com.techreturners.bowlingkata.app;
+package matt.thewizard.techreturners.bowlingkata.app;
 
 import com.techreturners.bowlingkata.model.*;
+import matt.thewizard.techreturners.bowlingkata.model.*;
 
 import java.util.Arrays;
 import java.util.Optional;

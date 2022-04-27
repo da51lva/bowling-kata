@@ -1,6 +1,6 @@
-package com.techreturners.bowlingkata;
+package matt.thewizard.techreturners.bowlingkata;
 
-import com.techreturners.bowlingkata.app.BowlingGame;
+import matt.thewizard.techreturners.bowlingkata.app.BowlingGame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
